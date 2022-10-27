@@ -1,10 +1,11 @@
 package conf
 
 import (
-	"os"
 	"api/cache"
 	"api/model"
 	"api/util"
+	"fmt"
+	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -23,6 +24,14 @@ func Init() {
 	}
 
 	// 连接数据库
-	model.Database(os.Getenv("MYSQL_DSN"))
+	USER := os.Getenv("DB_USER")
+	PASS := os.Getenv("DB_PASSWORD")
+	HOST := os.Getenv("DB_HOST")
+	DBNAME := os.Getenv("DB_NAME")
+
+	MYSQL_DSN := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS,
+		HOST, DBNAME)
+
+	model.Database(MYSQL_DSN)
 	cache.Redis()
 }
