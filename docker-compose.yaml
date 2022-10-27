@@ -23,6 +23,8 @@ services:
     tty: true
     depends_on:
       - mysql
+    links:
+      - mysql
     command: sh -c "/wait && /api-run"
     environment:
       - WAIT_HOSTS=mysql:3306
