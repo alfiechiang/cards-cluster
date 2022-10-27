@@ -1,29 +1,20 @@
 version: '3'
 services:
   mysql:
-    build:
-      context: ./mysql
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_USER: giant
-      MYSQL_PASSWORD: 123456
-      MYSQL_DATABASE: api
-    container_name: api_db
+      - MYSQL_DATABASE=api
+      - MYSQL_ROOT_PASSWORD=123456
     ports:
       - "3306:3306"
-    tty: true
   api:
     build:
       context: ./api-center
     volumes:
       - "./api-center:/workspace"
-    container_name: api_center
     ports:
       - "3000:3000"
-    tty: true
     depends_on:
-      - mysql
-    links:
       - mysql
     command: sh -c "/wait && /api-run"
     environment:
@@ -31,5 +22,3 @@ services:
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=30
       - WAIT_HOST_CONNECT_TIMEOUT=30
-   
-   
